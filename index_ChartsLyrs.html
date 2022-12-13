@@ -739,8 +739,8 @@ function ready(){
 	});
 	
 	
-	//d3.csv("https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv",function(data){
-	d3.csv("https://raw.githubusercontent.com/NYCDOB/Maps/data/Active_Sheds2.csv",function(data){
+	d3.csv("https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv",function(data){
+	//d3.csv("https://raw.githubusercontent.com/NYCDOB/Maps/data/Active_Sheds2.csv",function(data){
 				points = data.filter(function(d) {
 					if( !isNaN(+d["Latitude Point"]) && !isNaN(+d["Longitude Point"]) ) {
 						return d;
