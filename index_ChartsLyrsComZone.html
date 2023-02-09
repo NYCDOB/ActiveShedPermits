@@ -885,7 +885,7 @@ function ready(){
 
 	
 	//d3.csv("https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv",function(data){
-	d3.csv("data/Active_Sheds_ComZone.csv",function(data){
+	d3.csv("data/ActiveSheds_ComZone.csv",function(data){
 				points = data.filter(function(d) {
 					if( !isNaN(+d["Latitude Point"]) && !isNaN(+d["Longitude Point"]) ) {
 						return d;
@@ -1484,7 +1484,7 @@ function ready(){
 	$('#dlData').click(function(e) {
 		e.preventDefault();  //stop the browser from following
 		//window.location.href = 'https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv';
-		window.location.href = 'https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds_ComZone.csv';
+		window.location.href = 'https://nycdob.github.io/ActiveShedPermits/data/ActiveSheds_ComZone.csv';
 		
 	});
 	
