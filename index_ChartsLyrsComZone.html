@@ -1047,211 +1047,8 @@ function ready(){
 			console.log(totalLength);
 			d3.select("#summary3_feet").html(numberFormat(totalLength));
 
-			//SHEDS PER BOROUGH			
-			var nestBoroSheds = d3.nest()
-				.key(function(d){return d.Borough;}).sortKeys(d3.ascending)
-				.rollup(function(v) { 
-					return v.length;
-				})
-				.entries(data)
-				console.log(nestBoroSheds);
-				shedBoroChart(nestBoroSheds);
-				
-				
-			//TOP 5 COMMUNITY DISTRICTS
-			var nestCD = d3.nest()
-				.key(function(d) { return d.CD; })
-				.rollup(function(v) {
-					return v.length;
-				})			
-				.entries(data)
-				.sort(function(a, b){ return d3.descending(a.values, b.values); }).slice(0,5);	
-			console.log(nestCD);
-			shedCDChart(nestCD);
-			
-			
-			//TOP 5 JOB SITES
-			var nestJob = d3.nest()
-				.key(function(d) { return d.appName; })
-				.rollup(function(v) {
-					return v.length;
-				})
-				.entries(data)
-				.sort(function(a, b){ return d3.descending(a.values, b.values); }).slice(0,5);	
-			console.log(nestJob);
-			shedAppChart(nestJob);
-			
-				
-			function shedBoroChart(data){
-				var shedBoroData = [
-					{
-						key: "totals",
-						values: []
-					}
-				];
-
-				// populate the empty object with your data
-				data.forEach(function (d){
-					d.values = +d.values
-					shedBoroData[0].values.push(d)
-				})     
-				
-				
-				nv.addGraph(function() {				
-					var chart = nv.models.discreteBarChart()
-						.x(function (d) {  
-							return d.key 
-						})
-						.y(function (d) { 
-							return d.values 
-						})
-						.duration(250)
-						.margin({top: 15, right: 10, bottom: 20, left: 50})
-						.color(['#547A95']);
-					chart.yAxis.tickFormat(d3.format('.2s'));
-					chart.yAxis
-						.axisLabel('# Active Sheds')
-						.axisLabelDistance(-15);
-					chart.xAxis.tickFormat(function(d){
-						if (typeof this != 'undefined') {
-						 var el = d3.select(this);
-						 var p = d3.select(this.parentNode);
-						 p.append("foreignObject")
-							.attr('x', -100)
-							.attr("width", 200)
-							.attr("height", 200)
-							.append("xhtml:p")
-							.attr('style','word-wrap: break-word; text-align:center; font: normal 10px sans-serif;')
-							.html(d);    
-							el.remove();
-							return d;
-						}
-					});		
-					
-					d3.select('#chart-boro-sheds svg')
-							.datum(shedBoroData)
-							.transition().duration(250)
-							.call(chart);
-					nv.utils.windowResize(chart.update);
-					return chart;
-				});
-			}
-			
-			function shedCDChart(data){
-				var shedCDData = [
-					{
-						key: "totals",
-						values: []
-					}
-				];
-
-				// populate the empty object with your data
-				data.forEach(function (d){
-					d.values = +d.values
-					shedCDData[0].values.push(d)
-				})     
-				
-				
-				nv.addGraph(function() {				
-					var chart = nv.models.discreteBarChart()
-						.x(function (d) {  
-							return d.key 
-						})
-						.y(function (d) { 
-							return d.values 
-						})
-						.duration(250)
-						.margin({top: 15, right: 10, bottom: 20, left: 50})
-						.color(['#547A95']);
-					chart.yAxis.tickFormat(d3.format(','));
-					chart.yAxis
-						.axisLabel('# Active Sheds')
-						.axisLabelDistance(-15);
-					chart.xAxis.tickFormat(function(d){
-						if (typeof this != 'undefined') {
-						 var el = d3.select(this);
-						 var p = d3.select(this.parentNode);
-						 p.append("foreignObject")
-							.attr('x', -100)
-							.attr("width", 200)
-							.attr("height", 200)
-							.append("xhtml:p")
-							.attr('style','word-wrap: break-word; text-align:center; font: normal 10px sans-serif;')
-							.html(d);    
-							el.remove();
-							return d;
-						}
-					});										
-
-					d3.select('#cdsheds')
-							.datum(shedCDData)
-							.transition().duration(250)
-							.call(chart);
-					nv.utils.windowResize(chart.update);
-					return chart;
-				});
-			}
-			
-			function shedAppChart(data){
-				var shedAppData = [
-					{
-						key: "totals",
-						values: []
-					}
-				];
-
-				// populate the empty object with your data
-				data.forEach(function (d){
-					d.values = +d.values
-					shedAppData[0].values.push(d)
-				})     
-								
-					nv.addGraph(function() {				
-						var chart = nv.models.discreteBarChart()
-							.x(function (d) {  
-								return d.key 
-							})
-							.y(function (d) { 
-								return d.values 
-							})
-							.duration(250)
-							.margin({top: 15, right: 10, left: 50})
-							.color(['#547A95']);
-						chart.yAxis.tickFormat(d3.format('.2s'));
-						chart.yAxis
-							.axisLabel('# Active Sheds')
-							.axisLabelDistance(-15);
-						chart.xAxis.axisLabelDistance(10);
-						chart.xAxis.tickFormat(function(d){
-							if (typeof this != 'undefined') {
-							var el = d3.select(this);
-							var p = d3.select(this.parentNode);
-							p.append("foreignObject")
-								.attr('x', -35)
-								.attr("width", 70)
-								.attr("height", 200)
-								.append("xhtml:p")
-								.attr('style','word-wrap: break-word; text-align:center; font: normal 10px sans-serif; pointer-events: auto;')
-								.html(d);
-								el.remove();
-								return d;
-							}
-
-						});	
-											
-							d3.select('#shedApp')
-									.datum(shedAppData)
-									.transition().duration(250)
-									.call(chart);
-							nv.utils.windowResize(chart.update);
-							return chart;
-					}
-				);
-				
-			}
-
 ///// MULTI-CHARTS //////
-/*			
+			
 			//SHEDS PER BOROUGH			
 			var nestBoroSheds = d3.nest()
 				.key(function(d){return d.Commercial;})
@@ -1283,7 +1080,6 @@ function ready(){
 				
 			//TOP 5 COMMUNITY DISTRICTS
 			var nestCD = d3.nest()
-				.key(function(d) { return d.Commercial; })
 				.key(function(d) { return d.CD; })
 				.rollup(function(v) {
 					return v.length;
@@ -1291,10 +1087,32 @@ function ready(){
 				.entries(data)
 				.sort(function(a, b){ return d3.descending(a.values, b.values); }).slice(0,5);	
 			console.log(nestCD);
+			
+			var topCDKeys = nestCD.map(function(d){
+				return d.key;
+			});
+
+			//filter data for top 5 CDs
+			var topCD = data.filter (function(d,i){
+				return topCDKeys.indexOf(d.CD)>=0
+			});
+
+			console.log(topCDKeys);
+			console.log(topCD);
+			
+			//rollup by commercial and CD
+			var nestTopCDs = d3.nest()		
+				.key(function(d) { return d.Commercial; })
+				.key(function(d) { return d.CD; }).sortKeys(d3.ascending)
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(topCD)
+				.sort(function(a, b){ return d3.descending(a.values, b.values); })
 				
 			//FORMAT NEST TO JSON (REQUIRED BY NVD3)
 			var a1_cd=[],t=0;
-			for (vObj of nestCD ) {
+			for (vObj of nestTopCDs ) {
 					obj={key: vObj.key }
 					a1_cd.push(obj);
 					a2_cd=[];
@@ -1308,32 +1126,50 @@ function ready(){
 					t++;
 			};
 				
-			//console.log(nestCD);
-			shedCDChart(nestCD);
+			console.log(nestTopCDs);
+			shedCDChart(nestTopCDs, topCDKeys);
 			
 			
 			//TOP 5 JOB SITES
-			<!-- var nestJob = d3.nest() -->
-				<!-- .key(function(d) { return d.appName; }) -->
-				<!-- .rollup(function(v) { -->
-					<!-- return v.length; -->
-				<!-- }) -->
-				<!-- .entries(data) -->
-				<!-- .sort(function(a, b){ return d3.descending(a.values, b.values); }).slice(0,5);	 -->
+			
+			//get top 5 job applicants
 			var nestJob = d3.nest()
-				.key(function(d) { return d.Commercial; })
 				.key(function(d) { return d.appName; })
 				.rollup(function(v) {
 					return v.length;
-				})			
+				})
 				.entries(data)
 				.sort(function(a, b){ return d3.descending(a.values, b.values); }).slice(0,5);	
+			
+			
+			var topJobsKeys = nestJob.map(function(d){
+				return d.key;
+			});
+
+			//filter data for top 5 job applicants
+			var topJob = data.filter (function(d,i){
+				return topJobsKeys.indexOf(d.appName)>=0
+			});
+
+			console.log(topJobsKeys);
+			console.log(topJob);
+			
+			//rollup by commercial and applicant name
+			var nestTopJobs = d3.nest()		
+				.key(function(d) { return d.Commercial; })
+				.key(function(d) { return d.appName; }).sortKeys(d3.ascending)
+				.rollup(function(v) {
+					return v.length;
+				})			
+				.entries(topJob)
+				.sort(function(a, b){ return d3.descending(a.values, b.values); })
+				
 				
 			//FORMAT NEST TO JSON (REQUIRED BY NVD3)
-			var a1=[],t=0;
-			for (vObj of nestBoroSheds ) {
+			var a1_top=[],t=0;
+			for (vObj of nestTopJobs ) {
 					obj={key: vObj.key }
-					a1.push(obj);
+					a1_top.push(obj);
 					a2=[];
 					for (x=0;x<vObj.values.length;x++) {
 					   obj1={};
@@ -1341,11 +1177,12 @@ function ready(){
 					   obj1["value"]=vObj.values[x].values 
 					   a2.push(obj1);
 					}
-					a1[t].values=a2;
+					a1_top[t].values=a2;
 					t++;
 			};
 			console.log(nestJob);
-			shedAppChart(nestJob);
+			console.log(nestTopJobs);
+			shedAppChart(nestTopJobs, topJobsKeys);
 		
 			function shedBoroChart(data){
 
@@ -1390,8 +1227,8 @@ function ready(){
 				})
 			}
 			
-			function shedCDChart(data){
-
+			function shedCDChart(data, dataSort){
+				
 				nv.addGraph(function() {
 					var chart = nv.models.multiBarChart()
 					.x(function(d) { return d.label })
@@ -1399,7 +1236,8 @@ function ready(){
 					.duration(250)
 					.margin({top: 15, right: 10, bottom: 20, left: 50})
 					//.margin({right: 30})
-					//.xDomain(['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island'])
+					//.xDomain(['105', '108', '107', '102', '301'])
+					.xDomain(dataSort)
 					.color(['#547A95', '#DA8012'])
 					.showControls(false)
 					.stacked(true);
@@ -1432,16 +1270,17 @@ function ready(){
 						
 				})
 			}
-			function shedAppChart(data){
-
+			
+			function shedAppChart(data, sortData){
 				nv.addGraph(function() {
 					var chart = nv.models.multiBarChart()
 					.x(function(d) { return d.label })
 					.y(function(d) { return d.value })		
 					.duration(250)
-					.margin({top: 15, right: 10, bottom: 20, left: 50})
+					.margin({top: 15, right: 10, bottom: 50, left: 50})
 					//.margin({right: 30})
 					//.xDomain(['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island'])
+					.xDomain(sortData)
 					.color(['#547A95', '#DA8012'])
 					.showControls(false)
 					.stacked(true);
@@ -1449,32 +1288,33 @@ function ready(){
 					chart.yAxis
 						.axisLabel('# Active Sheds')
 						.axisLabelDistance(-15);
-					chart.xAxis.tickFormat(function(d){
-						if (typeof this != 'undefined') {
-						 var el = d3.select(this);
-						 var p = d3.select(this.parentNode);
-						 p.append("foreignObject")
-							.attr('x', -100)
-							.attr("width", 200)
-							.attr("height", 200)
-							.append("xhtml:p")
-							.attr('style','word-wrap: break-word; text-align:center; font: normal 10px sans-serif;')
-							.html(d);    
-							el.remove();
-							return d;
-						}
+						chart.xAxis.axisLabelDistance(10);
+						chart.xAxis.tickFormat(function(d){
+							if (typeof this != 'undefined') {
+							var el = d3.select(this);
+							var p = d3.select(this.parentNode);
+							p.append("foreignObject")
+								.attr('x', -35)
+								.attr("width", 70)
+								.attr("height", 200)
+								.append("xhtml:p")
+								.attr('style','word-wrap: break-word; text-align:center; font: normal 10px sans-serif; pointer-events: auto;')
+								.html(d);
+								el.remove();
+								return d;
+							}
+					
 					});
 					
 					d3.select('#shedApp')
-							.datum(a1)
+							.datum(a1_top)
 							.transition().duration(250)
 							.call(chart);
 					nv.utils.windowResize(chart.update);
 					return chart;
 						
 				})
-			}
-			*/			
+			}		
 	});	
 	
 		
