@@ -8,6 +8,7 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/r-2.1.0/se-1.2.0/datatables.min.css">
   <link href="https://nycdob.github.io/ActiveNB_A1enlargements/build/nv.d3.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="build/nouislider.css" media="screen" />
   <style>
 
 .filterTableButton {
@@ -421,6 +422,18 @@ svg {
 }
 
 .ui {
+	top: 350px;
+	left: 12px;
+	padding: 8px;
+	position: absolute;
+	background: white;
+	background: rgba(255,255,255,0.8);
+	border: 2px solid #707070;
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 7px;
+	width: 220px;
+}
+.ui-radio {
 	top: 225px;
 	left: 12px;
 	padding: 8px;
@@ -430,7 +443,7 @@ svg {
 	border: 2px solid #707070;
 	box-shadow: 0 0 15px rgba(0,0,0,0.2);
 	border-radius: 7px;
-	width: 200px;
+	width: 220px;
 }
 .form-check {
 	filter: grayscale(1);
@@ -501,6 +514,39 @@ input:checked + .slider:before {
 	line-height: 12px;
 	vertical-align: middle;
 }
+#slider-step {
+	top: 45px;
+	width: 350px;
+	position: absolute;
+	margin-left: 30px;
+	<!-- margin-top: 100px; -->
+	
+	background: white;
+	background: rgba(255,255,255,0.8);
+	border: 2px solid #707070;
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 7px;
+}
+.sliderContainer {
+	top: 430px;
+	left: 12px;
+	padding: 8px;
+	position: absolute;
+	background: white;
+	background: rgba(255,255,255,0.8);
+	border: 2px solid #707070;
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 7px;
+	width: 425px;
+	height: 110px;
+}
+#ageSliderTxt {
+		text-align: center;
+		margin-bottom: 15px;
+		font-variant: small-caps;
+		font-size: 15px;
+		font-weight: bold;
+}
 </style>
 <body>
 <div class="container">
@@ -515,30 +561,41 @@ input:checked + .slider:before {
 	<div class="row">
 		  <div class="col-lg-9" style="height:89vh">
 			  <div class="chart-stage" id="map-container" style="border:1px solid black;height:100%;width:100%">
+			  
 				<div id="map">
+				<div id="ui-slider" class="sliderContainer" style="z-index: 401"><p id="ageSliderTxt">Filter By Age</p>
+					<div id="slider-step" style="z-index: 401"></div>
+				</div>
+				
 				<svg></svg>
+				
+				
+					<div id="ui-container" class="ui-radio" style="z-index: 401">
+					  <form id="radioBox">
+						<div>
+						  <div class="form-check">
+							<input type="radio" class="form-check-input" name="o" value="radioShed" id="radioShed" checked>
+							<label class="form-check-label" for="radioShed">Active Sheds by Age</label>
+						  </div>
+						  <div class="form-check">
+							<input type="radio" class="form-check-input" name="o" value="radioCD" id="radioCD">
+							<label class="form-check-label" for="radioCD" id="cdtxt">Community Districts</br>(Choropleth Map)</label>
+						  </div>
+						</div>
+					  </form>	
+					</div>
+					
+					
+					
 					<!-- <div id="ui-container" class="ui" style="z-index: 401"> -->
-					  <!-- <form id="radioBox"> -->
-						<!-- <div> -->
-						  <!-- <div class="form-check"> -->
-							<!-- <input type="radio" class="form-check-input" name="o" value="radioShed" id="radioShed" checked> -->
-							<!-- <label class="form-check-label" for="radioShed">Active Sheds by Age</label> -->
-						  <!-- </div> -->
-						  <!-- <div class="form-check"> -->
-							<!-- <input type="radio" class="form-check-input" name="o" value="radioCD" id="radioCD"> -->
-							<!-- <label class="form-check-label" for="radioCD" id="cdtxt">Community Districts</br>(Choropleth Map)</label> -->
-						  <!-- </div> -->
-						<!-- </div> -->
-					  <!-- </form>	 -->
-					<!-- </div> -->
-					<div id="ui-container" class="ui" style="z-index: 401">
+					<div id="ui-commercial" class="ui" style="z-index: 401">
 						<span style="display:inline-block;">
 							<label class="switch">
 								<input type="checkbox" checked="true" id="chkCom">
 								<span class="slider" id="sliderCom"></span>						
 							</label>
 							
-							<span class="en" id="sliderTxt">Commercial Zone</span>
+							<span class="en" id="sliderTxt">Commercial District/Overlay</span>
 						</span>
 						<br/>
 
@@ -547,9 +604,10 @@ input:checked + .slider:before {
 								<input type="checkbox" checked="true" id="chkNonCom">
 								<span class="slider" id="sliderNonCom"></span>
 							</label>
-							<span class="en" id="sliderTxt">Non-Commercial Zone</span>
+							<span class="en" id="sliderTxt">Other Zoning Districts</span>
 						</span>
 					</div>
+					
 				
 				</div>
 			  </div>
@@ -596,6 +654,7 @@ input:checked + .slider:before {
 					</div>
 				</div>
 			  </div>
+			  
 	</div>
 	<p class="small text-muted" style=" position:relative; bottom:0px;">Built by DOB Analytics <a href="https://www1.nyc.gov/site/buildings/dob/analytics-reports.page" target="_blank">Dev Squad</a> | This map shows the location of all actively permitted sidewalk sheds and is updated daily. <a id="dlData" href="no-script.html">Download Data (csv)</a></p>	
 </div>
@@ -615,6 +674,8 @@ input:checked + .slider:before {
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.20/api/fnSortNeutral.js"></script>
+<script src="build/nouislider.js"></script>
+<script src="build/wNumb.js"></script>
 <script>
 
 $(document).ready(function(){
@@ -659,17 +720,26 @@ var width = $("#map").width(),
 	cat,
 	cdSheds,
 	sheds_CD,
+	ageYear = [],
+	ageVal,
+	comSlider,
+	noncomSlider,
 	radius;
+var ageFormat = 0;
 	
 onload = ready();
 
 	
 function ready(){
 
+	comSlider = document.querySelector('input[id="chkCom"]');
+	noncomSlider = document.querySelector('input[id="chkNonCom"]');
+	
 	pointsOverlaySQFT = L.d3SvgOverlay(function(sel,proj){
 		var pointsUpdSQFT = sel.selectAll('circle').data(points);
 		var maxAge = d3.max(points.map(function(d) { return d.age }));
 		var minAge = d3.min(points.map(function(d) { return d.age }));
+
 
 
 		console.log(maxAge);
@@ -727,7 +797,7 @@ function ready(){
 				return regionColor
 			}	
 		}
-
+		
 		
 		function createLegend(minLabel, maxLabel) {
 			
@@ -775,6 +845,7 @@ function ready(){
 				};	
 		}
 
+
 		
 		pointsUpdSQFT.enter()
 			.append('circle')		
@@ -786,10 +857,10 @@ function ready(){
 			<!-- }) -->
 			.attr('class', function(d){
 				switch(d.Commercial){
-					case 'Commercial':
+					case 'Commercial District/Overlay':
 						return 'pointCom';
 						break;
-					case 'Non-Commercial':
+					case 'Other Zoning Districts':
 						return 'pointNonCom';
 						break;
 				}
@@ -813,7 +884,7 @@ function ready(){
 						'CONSTRUCTION MATERIAL: ' + d.constMat + '</br>' +
 						'APPLICANT BUSINESS NAME: ' + d.appName + '</br>' +
 						'ACTIVITY: ' + d.activity + '</br>' +
-						'ZONE: ' + d.commercial + '</br>'
+						'ZONING: ' + d.commercial + '</br>'
 					)
 					if (d3.event.pageX > (width - 200)) {
 					   tooltipSheds.style("left", (d3.event.pageX - 350) + "px");
@@ -843,49 +914,14 @@ function ready(){
 			
 			pointsUpdSQFT.attr("r", function(d) { return radius(d.age  / proj.scale); });
 			pointsUpdSQFT.attr("stroke-width", 1 / proj.scale);
-			
-			var comSlider = document.querySelector('input[id="chkCom"]');
-				noncomSlider = document.querySelector('input[id="chkNonCom"]');
+							
 				
-				comSlider.onchange = function(){
-						if(this.checked){
-							d3.selectAll(".pointCom").filter(function(d) {
-								return d.commercial == "Commercial";
-							})
-							.style("display", "block");	
-
-						} else {
-							d3.selectAll(".pointCom").filter(function(d) {
-								return d.commercial == "Commercial";
-							})
-							.style("display", "none");
-										
-						}
-				};		
-				
-				noncomSlider.onchange = function(){
-						if(this.checked){
-							d3.selectAll(".pointNonCom").filter(function(d) {
-								return d.commercial == "Non-Commercial";
-							})
-							.style("display", "block");	
-
-						} else {
-							d3.selectAll(".pointNonCom").filter(function(d) {
-								return d.commercial == "Non-Commercial";
-							})
-							.style("display", "none");
-										
-						}
-				};
-				
-		
 	});
 	
 
 	
 	//d3.csv("https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv",function(data){
-	d3.csv("data/ActiveSheds_ComZone.csv",function(data){
+	d3.csv("data/ActiveSheds_ComZone_2.csv",function(data){
 				points = data.filter(function(d) {
 					if( !isNaN(+d["Latitude Point"]) && !isNaN(+d["Longitude Point"]) ) {
 						return d;
@@ -993,25 +1029,38 @@ function ready(){
 				
 				removeGeojson();
 
-				<!-- var shedRadio = document.querySelector('input[id="radioShed"]'); -->
-					<!-- cdRadio = document.querySelector('input[id="radioCD"]'); -->
+				var shedRadio = document.querySelector('input[id="radioShed"]');
+					cdRadio = document.querySelector('input[id="radioCD"]');
 
-				<!-- shedRadio.onchange = function(){ -->
-						<!-- if(this.checked){ -->
-							<!-- removeGeojson(); -->
-							<!-- d3.selectAll(".pointShed").style("display", "block"); -->
-							<!-- d3.selectAll(".legendShed").style("display", "block");	 -->
-							<!-- d3.selectAll(".legendCD").style("display", "none"); -->
-						<!-- } -->
-				<!-- } -->
-				<!-- cdRadio.onchange = function(){ -->
-						<!-- if(this.checked){ -->
-							<!-- addGeojson(); -->
-							<!-- d3.selectAll(".pointShed").style("display", "none"); -->
-							<!-- d3.selectAll(".legendShed").style("display", "none");	 -->
-							<!-- d3.selectAll(".legendCD").style("display", "block"); -->
-						<!-- } -->
-				<!-- } -->
+				shedRadio.onchange = function(){
+						if(this.checked){
+							removeGeojson();
+							//d3.selectAll(".pointShed").style("display", "block");
+							d3.selectAll(".pointCom").style("display", "block");
+							d3.selectAll(".pointNonCom").style("display", "block");
+							d3.selectAll(".legendShed").style("display", "block");	
+							d3.selectAll(".legendCD").style("display", "none");
+							d3.selectAll("#ui-commercial").style("display", "block");
+							d3.selectAll("#chkCom").property('checked', true);
+							d3.selectAll("#chkNonCom").property('checked', true);
+							//d3.selectAll("#step-slider").style("display", "block");
+							d3.selectAll(".sliderContainer").style("display", "block");
+							stepSlider.noUiSlider.set(0);
+						}
+				}
+				cdRadio.onchange = function(){
+						if(this.checked){
+							addGeojson();
+							//d3.selectAll(".pointShed").style("display", "none");
+							d3.selectAll(".pointCom").style("display", "none");
+							d3.selectAll(".pointNonCom").style("display", "none");
+							d3.selectAll(".legendShed").style("display", "none");	
+							d3.selectAll(".legendCD").style("display", "block");
+							d3.selectAll("#ui-commercial").style("display", "none");
+							//d3.selectAll("#slider-step").style("display", "none");
+							d3.selectAll(".sliderContainer").style("display", "none");
+						}
+				}
 
 			});
 			
@@ -1022,11 +1071,123 @@ function ready(){
 			d3.selectAll(".pointNonCom").style("display", "block");
 			
 			legendShed.addTo(map);
-			//legendCD.addTo(map);
+			legendCD.addTo(map);
 
-			//d3.selectAll(".legendCD").style("display", "none");
+			d3.selectAll(".legendCD").style("display", "none");
 			d3.selectAll(".legendShed").style("display", "block");
+	
+
+			//AGE SLIDER
+			var stepSlider = document.getElementById('slider-step');
+			
+			
+			noUiSlider.create(stepSlider, {
+				start: 0,
+				connect: 'lower',
+				<!-- tooltips: [ -->
+					<!-- wNumb({ -->
+						<!-- decimals: 0, -->
+						<!-- prefix: '>', -->
+						<!-- suffix: ' YEARS' -->
+					<!-- }), -->
+				<!-- ], -->
+				range: {
+					'min': [0],
+					'max': [5]
+				},
+				
+				step: 1,
+
+				pips: {
+					mode: 'steps',
+					density: 25,
+					format: wNumb({
+						prefix: '>',
+						suffix: ' YEARS'
+					})
+				}	
+			})
+			.on("update", function(e) {
+				console.log(e);	
+				formatAge(e);
+			});
+			
+			
+			console.log(ageFormat);
+			comSlider.onchange = function(){
+					if(this.checked){
+						d3.selectAll(".pointCom").filter(function(d) {
+							return d.commercial == "Commercial District/Overlay";
+						})
+						.style("display", "block");	
 						
+
+					} else {
+						d3.selectAll(".pointCom").filter(function(d) {
+							return d.commercial == "Commercial District/Overlay";
+						})
+						.style("display", "none");
+									
+					}
+			};		
+			
+			noncomSlider.onchange = function(){
+					if(this.checked){
+						d3.selectAll(".pointNonCom").filter(function(d) {
+							return d.commercial == "Other Zoning Districts";
+						})
+						.style("display", "block");	
+
+					} else {
+						d3.selectAll(".pointNonCom").filter(function(d) {
+							return d.commercial == "Other Zoning Districts";
+						})
+						.style("display", "none");
+									
+					}
+			};
+			
+			
+			
+			function formatAge(e){
+				var formatter = d3.format(".2");
+				ageFormat = formatter(e);
+				console.log(ageFormat);	
+				setComAgeVal(ageFormat);	
+				setNonComAgeVal(ageFormat);	
+			}
+
+			function setComAgeVal(ageFormat){
+				if (comSlider.checked===true){
+					d3.selectAll(".pointCom").style("display", "block");
+					d3.selectAll(".pointCom").filter(function(d){
+							return d.age/365 < ageFormat;
+					})
+					.style("display", "none");
+				} else {
+					d3.selectAll(".pointCom").style("display", "none");
+				}
+			}
+			
+			function setNonComAgeVal(ageFormat){
+				if (noncomSlider.checked===true){
+					d3.selectAll(".pointNonCom").style("display", "block");
+					d3.selectAll(".pointNonCom").filter(function(d){
+							return d.age/365 < ageFormat;
+					})
+					.style("display", "none");
+				} else {
+					d3.selectAll(".pointNonCom").style("display", "none");
+				}
+			}
+						
+			comSlider.onchange = function(){	
+				setComAgeVal(ageFormat);
+			}
+			noncomSlider.onchange = function(){	
+				setNonComAgeVal(ageFormat);
+			}
+
 
 		//CHARTS
 			
@@ -1051,7 +1212,7 @@ function ready(){
 			
 			//SHEDS PER BOROUGH			
 			var nestBoroSheds = d3.nest()
-				.key(function(d){return d.Commercial;})
+				.key(function(d){return d.Commercial;}).sortKeys(d3.ascending)
 				.key(function(d){return d.Borough;}).sortKeys(d3.ascending)
 				.rollup(function(v) { 
 					return v.length;
@@ -1102,7 +1263,7 @@ function ready(){
 			
 			//rollup by commercial and CD
 			var nestTopCDs = d3.nest()		
-				.key(function(d) { return d.Commercial; })
+				.key(function(d) { return d.Commercial; }).sortKeys(d3.ascending)
 				.key(function(d) { return d.CD; }).sortKeys(d3.ascending)
 				.rollup(function(v) {
 					return v.length;
@@ -1194,9 +1355,10 @@ function ready(){
 					.margin({top: 15, right: 10, bottom: 20, left: 50})
 					//.margin({right: 30})
 					//.xDomain(['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island'])
-					.color(['#547A95', '#DA8012'])
+					.color(['#DA8012', '#547A95'])
 					.showControls(false)
 					.stacked(true);
+					
 					chart.yAxis.tickFormat(d3.format('.2s'));
 					chart.yAxis
 						.axisLabel('# Active Sheds')
@@ -1238,9 +1400,10 @@ function ready(){
 					//.margin({right: 30})
 					//.xDomain(['105', '108', '107', '102', '301'])
 					.xDomain(dataSort)
-					.color(['#547A95', '#DA8012'])
+					.color(['#DA8012', '#547A95'])
 					.showControls(false)
 					.stacked(true);
+					
 					chart.yAxis.tickFormat(d3.format('.2s'));
 					chart.yAxis
 						.axisLabel('# Active Sheds')
@@ -1281,7 +1444,7 @@ function ready(){
 					//.margin({right: 30})
 					//.xDomain(['Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island'])
 					.xDomain(sortData)
-					.color(['#547A95', '#DA8012'])
+					.color(['#DA8012', '#547A95'])
 					.showControls(false)
 					.stacked(true);
 					chart.yAxis.tickFormat(d3.format('.2s'));
@@ -1314,7 +1477,8 @@ function ready(){
 					return chart;
 						
 				})
-			}		
+			}
+						
 	});	
 	
 		
@@ -1323,8 +1487,7 @@ function ready(){
 	
 	$('#dlData').click(function(e) {
 		e.preventDefault();  //stop the browser from following
-		//window.location.href = 'https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv';
-		window.location.href = 'https://nycdob.github.io/ActiveShedPermits/data/ActiveSheds_ComZone.csv';
+		window.location.href = 'https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv';
 		
 	});
 	
