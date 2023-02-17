@@ -1059,6 +1059,7 @@ function ready(){
 							d3.selectAll("#ui-commercial").style("display", "none");
 							//d3.selectAll("#slider-step").style("display", "none");
 							d3.selectAll(".sliderContainer").style("display", "none");
+							stepSlider.noUiSlider.set(0);
 						}
 				}
 
@@ -1066,7 +1067,6 @@ function ready(){
 			
 			pointsOverlaySQFT.addTo(map);
 			
-			//d3.selectAll(".pointShed").style("display", "block");
 			d3.selectAll(".pointCom").style("display", "block");
 			d3.selectAll(".pointNonCom").style("display", "block");
 			
@@ -1084,13 +1084,6 @@ function ready(){
 			noUiSlider.create(stepSlider, {
 				start: 0,
 				connect: 'lower',
-				<!-- tooltips: [ -->
-					<!-- wNumb({ -->
-						<!-- decimals: 0, -->
-						<!-- prefix: '>', -->
-						<!-- suffix: ' YEARS' -->
-					<!-- }), -->
-				<!-- ], -->
 				range: {
 					'min': [0],
 					'max': [5]
@@ -1155,6 +1148,7 @@ function ready(){
 				console.log(ageFormat);	
 				setComAgeVal(ageFormat);	
 				setNonComAgeVal(ageFormat);	
+				charts(ageFormat);
 			}
 
 			function setComAgeVal(ageFormat){
@@ -1188,36 +1182,42 @@ function ready(){
 				setNonComAgeVal(ageFormat);
 			}
 
-
-		//CHARTS
 			
+		function charts(ageFormat){	
 			//TOTAL CITYWIDE SHEDS
-			totalSheds = data.map(function(d) { return d.jobNum });
+			totalSheds = data.filter(function(d){
+							return d.age/365 > ageFormat;
+						}).map(function(d) { return d.jobNum });
 			console.log(totalSheds);
 			d3.select("#summary1_sheds").html(numberFormat(totalSheds.length));
 
-			
-
 			//AVG AGE
-			var shedsAvgAge = d3.mean(data,function(d) { return d.age; });
+			var shedsAvgAge = d3.mean(data.filter(function(d){
+							return d.age/365 > ageFormat;
+						}),function(d) { return d.age; });
 			console.log(shedsAvgAge);
 			d3.select("#summary2_avgAge").html(numberFormat(shedsAvgAge));
 
 			//TOTAL LENGTH
-			var totalLength = d3.sum(data.map(function(d) { return d.shedFeet }));
+			var totalLength = d3.sum(data.filter(function(d){
+							return d.age/365 > ageFormat;
+						}).map(function(d) { return d.shedFeet }));
 			console.log(totalLength);
 			d3.select("#summary3_feet").html(numberFormat(totalLength));
-
+		
 ///// MULTI-CHARTS //////
 			
-			//SHEDS PER BOROUGH			
+			//SHEDS PER BOROUGH		
+			var filterData = data.filter(function(d){
+				return d.age/365 > ageFormat;
+			})
 			var nestBoroSheds = d3.nest()
 				.key(function(d){return d.Commercial;}).sortKeys(d3.ascending)
 				.key(function(d){return d.Borough;}).sortKeys(d3.ascending)
 				.rollup(function(v) { 
 					return v.length;
 				})
-				.entries(data)
+				.entries(filterData)
 
 				
 			//FORMAT NEST TO JSON (REQUIRED BY NVD3)
@@ -1245,7 +1245,7 @@ function ready(){
 				.rollup(function(v) {
 					return v.length;
 				})			
-				.entries(data)
+				.entries(filterData)
 				.sort(function(a, b){ return d3.descending(a.values, b.values); }).slice(0,5);	
 			console.log(nestCD);
 			
@@ -1253,10 +1253,10 @@ function ready(){
 				return d.key;
 			});
 
-			//filter data for top 5 CDs
-			var topCD = data.filter (function(d,i){
+			
+			var topCD = filterData.filter (function(d,i){
 				return topCDKeys.indexOf(d.CD)>=0
-			});
+			});		
 
 			console.log(topCDKeys);
 			console.log(topCD);
@@ -1267,10 +1267,28 @@ function ready(){
 				.key(function(d) { return d.CD; }).sortKeys(d3.ascending)
 				.rollup(function(v) {
 					return v.length;
-				})			
+				})	
+				
 				.entries(topCD)
 				.sort(function(a, b){ return d3.descending(a.values, b.values); })
 				
+			//SET MISSING KEY VALUES TO ZERO	
+			makeAllKeys = function(d){
+				var allKeys = topCDKeys
+				return allKeys
+			}				
+            nestTopCDs = nestTopCDs.map(function(d) {
+                      return {
+                        key: d.key,
+						values: makeAllKeys(+d.key).map(function(k) {
+							value = d.values.filter(function(v) {return v.key == k})[0]
+							return value || ({key: k, values:0})
+							})
+							}
+						})				
+
+			
+
 			//FORMAT NEST TO JSON (REQUIRED BY NVD3)
 			var a1_cd=[],t=0;
 			for (vObj of nestTopCDs ) {
@@ -1299,7 +1317,8 @@ function ready(){
 				.rollup(function(v) {
 					return v.length;
 				})
-				.entries(data)
+				//.entries(data)
+				.entries(filterData)
 				.sort(function(a, b){ return d3.descending(a.values, b.values); }).slice(0,5);	
 			
 			
@@ -1307,8 +1326,8 @@ function ready(){
 				return d.key;
 			});
 
-			//filter data for top 5 job applicants
-			var topJob = data.filter (function(d,i){
+			
+			var topJob = filterData.filter (function(d,i){
 				return topJobsKeys.indexOf(d.appName)>=0
 			});
 
@@ -1324,6 +1343,21 @@ function ready(){
 				})			
 				.entries(topJob)
 				.sort(function(a, b){ return d3.descending(a.values, b.values); })
+				
+			//SET MISSING KEY VALUES TO ZERO	
+			makeAllKeys = function(d){
+				var allKeys = topJobsKeys
+				return allKeys
+			}				
+            nestTopJobs = nestTopJobs.map(function(d) {
+                      return {
+                        key: d.key,
+						values: makeAllKeys(+d.key).map(function(k) {
+							value = d.values.filter(function(v) {return v.key == k})[0]
+							return value || ({key: k, values:0})
+							})
+							}
+						})	
 				
 				
 			//FORMAT NEST TO JSON (REQUIRED BY NVD3)
@@ -1478,7 +1512,7 @@ function ready(){
 						
 				})
 			}
-						
+		}				
 	});	
 	
 		
@@ -1487,7 +1521,7 @@ function ready(){
 	
 	$('#dlData').click(function(e) {
 		e.preventDefault();  //stop the browser from following
-		window.location.href = 'https://nycdob.github.io/ActiveShedPermits/data/ActiveSheds_ComZone_2.csv';
+		window.location.href = 'https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv';
 		
 	});
 	
