@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/r-2.1.0/se-1.2.0/datatables.min.css">
   <link href="https://nycdob.github.io/ActiveNB_A1enlargements/build/nv.d3.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" type="text/css" href="build/nouislider.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="https://nycdob.github.io/ActiveShedPermits/build/nouislider.css" media="screen" />
   <style>
 
 .filterTableButton {
@@ -674,8 +674,8 @@ input:checked + .slider:before {
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.20/api/fnSortNeutral.js"></script>
-<script src="build/nouislider.js"></script>
-<script src="build/wNumb.js"></script>
+<script src="https://nycdob.github.io/ActiveShedPermits/build/nouislider.js"></script>
+<script src="https://nycdob.github.io/ActiveShedPermits/build/wNumb.js"></script>
 <script>
 
 $(document).ready(function(){
@@ -751,7 +751,7 @@ function ready(){
 		
 		radius = d3.scale.sqrt()
 			.domain([0, maxAge])
-			.range([0, 30])
+			.range([1, 30])
 				
 
 		function calcPropRadius(attributeValue) {
@@ -918,10 +918,8 @@ function ready(){
 				
 	});
 	
-
 	
-	//d3.csv("https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv",function(data){
-	d3.csv("data/ActiveSheds_ComZone_2.csv",function(data){
+	d3.csv("https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv",function(data){
 				points = data.filter(function(d) {
 					if( !isNaN(+d["Latitude Point"]) && !isNaN(+d["Longitude Point"]) ) {
 						return d;
@@ -1076,6 +1074,7 @@ function ready(){
 			d3.selectAll(".legendCD").style("display", "none");
 			d3.selectAll(".legendShed").style("display", "block");
 	
+			
 
 			//AGE SLIDER
 			var stepSlider = document.getElementById('slider-step');
@@ -1143,19 +1142,20 @@ function ready(){
 			
 			
 			function formatAge(e){
-				var formatter = d3.format(".2");
+				//var formatter = d3.format(".2");
+				var formatter = d3.format(".4f");
 				ageFormat = formatter(e);
 				console.log(ageFormat);	
 				setComAgeVal(ageFormat);	
 				setNonComAgeVal(ageFormat);	
 				charts(ageFormat);
 			}
-
+			
 			function setComAgeVal(ageFormat){
 				if (comSlider.checked===true){
 					d3.selectAll(".pointCom").style("display", "block");
 					d3.selectAll(".pointCom").filter(function(d){
-							return d.age/365 < ageFormat;
+							return (d.age)/365 < ageFormat;
 					})
 					.style("display", "none");
 				} else {
@@ -1167,13 +1167,15 @@ function ready(){
 				if (noncomSlider.checked===true){
 					d3.selectAll(".pointNonCom").style("display", "block");
 					d3.selectAll(".pointNonCom").filter(function(d){
-							return d.age/365 < ageFormat;
+							return (d.age)/365 < ageFormat;
 					})
 					.style("display", "none");
 				} else {
 					d3.selectAll(".pointNonCom").style("display", "none");
 				}
 			}
+			
+
 						
 			comSlider.onchange = function(){	
 				setComAgeVal(ageFormat);
@@ -1184,23 +1186,27 @@ function ready(){
 
 			
 		function charts(ageFormat){	
-			//TOTAL CITYWIDE SHEDS
+			//TOTAL CITYWIDE SHEDS			
 			totalSheds = data.filter(function(d){
-							return d.age/365 > ageFormat;
+					if(d.age == 0){
+						return (d.age+1)/365 > ageFormat;
+					} else {
+						return d.age/365 > ageFormat;
+					}
 						}).map(function(d) { return d.jobNum });
 			console.log(totalSheds);
 			d3.select("#summary1_sheds").html(numberFormat(totalSheds.length));
-
+			
 			//AVG AGE
 			var shedsAvgAge = d3.mean(data.filter(function(d){
-							return d.age/365 > ageFormat;
+							return (d.age+1)/365 > ageFormat;
 						}),function(d) { return d.age; });
 			console.log(shedsAvgAge);
 			d3.select("#summary2_avgAge").html(numberFormat(shedsAvgAge));
 
 			//TOTAL LENGTH
 			var totalLength = d3.sum(data.filter(function(d){
-							return d.age/365 > ageFormat;
+							return (d.age+1)/365 > ageFormat;
 						}).map(function(d) { return d.shedFeet }));
 			console.log(totalLength);
 			d3.select("#summary3_feet").html(numberFormat(totalLength));
@@ -1209,7 +1215,7 @@ function ready(){
 			
 			//SHEDS PER BOROUGH		
 			var filterData = data.filter(function(d){
-				return d.age/365 > ageFormat;
+				return (d.age+1)/365 > ageFormat;
 			})
 			var nestBoroSheds = d3.nest()
 				.key(function(d){return d.Commercial;}).sortKeys(d3.ascending)
