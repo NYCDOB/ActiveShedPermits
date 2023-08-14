@@ -18,7 +18,7 @@
 	font-weight:bolder !important;
 }
 .row{
-	padding-top: 50px;
+	padding-top: 10px;
 }
 body {
 	background-color: white;
@@ -120,9 +120,11 @@ tr.shown td.details-control {
 	.legendCD {
 		visibility:hidden;
 	}
-	.ui {
-		margin-top: -150px;
-	}
+	<!-- .ui { -->
+		<!-- margin-top: -150px; -->
+	<!-- } -->
+
+
 }
 
 @media ( max-width:2100px){
@@ -147,6 +149,7 @@ tr.shown td.details-control {
 	.summarytxt {
 		font-size: 12px !important;
 	}
+
 }
 
 .dataTables_filter input { width: 150px }
@@ -363,6 +366,7 @@ svg {
 		box-shadow: 0 0 15px rgba(0,0,0,0.2);
 		border-radius: 7px;
 		width: 160px;
+		
 
 }
 .legendCD {
@@ -374,6 +378,7 @@ svg {
 		box-shadow: 0 0 15px rgba(0,0,0,0.2);
 		border-radius: 7px;
 		width: 160px;
+		height: 100%;
 
 
 }
@@ -403,6 +408,7 @@ svg {
 		font-variant: small-caps;
 		font-size: 15px;
 		font-weight: bold;
+		padding-top: 5px;
 }
 .symbolsContainerSQFT {
 		float: left;
@@ -547,6 +553,11 @@ input:checked + .slider:before {
 		font-size: 15px;
 		font-weight: bold;
 }
+#sourceTxt {
+  padding-top:55px;
+  padding-left: 10px;
+  text-align:left;
+}
 </style>
 <body>
 <div class="container">
@@ -557,7 +568,10 @@ input:checked + .slider:before {
 				</div>
 			</div>
 </div>
-<div class="container-fluid dobmain" style="margin-top:20px;">
+	<p class="small text-muted" id="sourceTxt">Built by DOB Analytics <a href="https://www1.nyc.gov/site/buildings/dob/analytics-reports.page" target="_blank">Dev Squad</a> | This map shows the location of all actively permitted sidewalk sheds and is updated daily. <a id="dlData" href="no-script.html">Download Data (csv)</a></p>
+
+
+<div class="container-fluid dobmain" style="padding-top:5px;">
 	<div class="row">
 		  <div class="col-lg-9" style="height:89vh">
 			  <div class="chart-stage" id="map-container" style="border:1px solid black;height:100%;width:100%">
@@ -656,7 +670,7 @@ input:checked + .slider:before {
 			  </div>
 			  
 	</div>
-	<p class="small text-muted" style=" position:relative; bottom:0px;">Built by DOB Analytics <a href="https://www1.nyc.gov/site/buildings/dob/analytics-reports.page" target="_blank">Dev Squad</a> | This map shows the location of all actively permitted sidewalk sheds and is updated daily. <a id="dlData" href="no-script.html">Download Data (csv)</a></p>	
+	<!-- <p class="small text-muted" style=" position:relative; bottom:0px;">Built by DOB Analytics <a href="https://www1.nyc.gov/site/buildings/dob/analytics-reports.page" target="_blank">Dev Squad</a> | This map shows the location of all actively permitted sidewalk sheds and is updated daily. <a id="dlData" href="no-script.html">Download Data (csv)</a></p>	 -->
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
@@ -920,6 +934,7 @@ function ready(){
 	
 	
 	d3.csv("https://nycdob.github.io/ActiveShedPermits/data/Active_Sheds2.csv",function(data){
+	//d3.csv("data/Active_Sheds2_031023.csv",function(data){
 				points = data.filter(function(d) {
 					if( !isNaN(+d["Latitude Point"]) && !isNaN(+d["Longitude Point"]) ) {
 						return d;
@@ -947,7 +962,7 @@ function ready(){
 			});
 			
 
-			$.getJSON("https://nycdob.github.io/ActiveShedPermits/data/CommunityDistricts.json",function(json){
+			$.getJSON("data/CommunityDistricts.json",function(json){
 
 				var ageByCD = d3.nest()
 					.key(function(d) { return d.CD; })
