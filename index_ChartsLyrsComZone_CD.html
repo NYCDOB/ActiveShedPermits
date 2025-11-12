@@ -1524,8 +1524,14 @@ function ready(){
 							return (d.age)/365 < ageFormat;
 					})
 					.style("display", "none");
-				} else if (comSlider.checked===true && multiSelectCD.value == "cdAll") {
+				} else if (comSlider.checked===true && multiSelectCD.value === "cdAll") {
 					d3.selectAll(".pointCom").style("display", "block");
+
+					d3.selectAll(".pointCom").filter(function(d){
+							return (d.age)/365 < ageFormat;
+					})
+					.style("display", "none");
+					
 				} else {
 					d3.selectAll(".pointCom").style("display", "none");
 				}
@@ -1542,8 +1548,14 @@ function ready(){
 							return (d.age)/365 < ageFormat;
 					})
 					.style("display", "none");
-				} else if (noncomSlider.checked===true && multiSelectCD.value == "cdAll") {
+				} else if (noncomSlider.checked===true && multiSelectCD.value === "cdAll") {
 					d3.selectAll(".pointNonCom").style("display", "block");
+
+					d3.selectAll(".pointNonCom").filter(function(d){
+							return (d.age)/365 < ageFormat;
+					})
+					.style("display", "none");
+					
 				} else {
 					d3.selectAll(".pointNonCom").style("display", "none");
 				}
@@ -1938,4 +1950,5 @@ function ready(){
 
 </script>
 </body>
+
 </html>
