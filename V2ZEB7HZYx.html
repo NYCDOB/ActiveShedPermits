@@ -58,7 +58,6 @@ tr.shown td.details-control {
 	cursor: pointer;
 }
 .logo{
-	/* background-image: url('data/dob_transparent_highres.png'); */
 	background-image: url('https://raw.githubusercontent.com/NYCDOB/CommunityProfiles_v2/gh-pages/dob_logo_white_transparent.png');
 	background-repeat: no-repeat;
 	background-position: center;
@@ -596,17 +595,18 @@ a.report311 {
 }
 header, footer {
 	color: #ffffff;
-	padding: 1rem 1.5rem;
+	padding: 1rem 2rem;
 	flex-shrink: 0;
 	z-index: 10;
 	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 header{
-	align-items:baseline;
+	align-items:center;
 	font-size:2em;
 	font-weight:bolder;
 	background-color:RGB(40, 56, 124);
-	display:flex;justify-content: space-between;
+	display:flex;
+	justify-content: space-between;
 }
 .notes  {
     padding: 15px 2.5em;
@@ -619,7 +619,9 @@ header{
 <body>
 <header>
 	<div>ACTIVE SIDEWALK SHED PERMITS</div><!-- <div class="lastupdate"></div> -->
-	<div><a href="https://www1.nyc.gov/site/buildings/index.page" target="_blank"0><img height=100px zzwidth=60px; src="https://nycdob.github.io/EssentialActiveConstruction/images/dob_logo_white.png"></a></div>
+	<!-- <div><a href="https://www1.nyc.gov/site/buildings/index.page" target="_blank"0><img height=125px zzwidth=60px; src="https://nycdob.github.io/EssentialActiveConstruction/images/dob_logo_white.png"></a></div> -->
+	<div><a class="logo" href="https://www1.nyc.gov/site/buildings/index.page" target="_blank"> </a></div>
+
 </header>
 <div class="notes">
 	<div>
