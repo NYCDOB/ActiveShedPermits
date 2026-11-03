@@ -84,10 +84,11 @@ tr.shown td.details-control {
 	border-radius: 3px; 
 	opacity: 1; 
 	position: absolute;
+    zzztop:250px;
     border: 1px solid #707070;
 	bottom: 5px;
 	width: 25em;
-	left:5px;
+	left:15px;
 	display:none;
 	max-height:40%;
 	flex-direction: column;	
@@ -626,7 +627,7 @@ header{
 			<a class="" href="https://portal.311.nyc.gov/article/?kanumber=KA-02291" target="_blank">Sidewalk Shed - Without Permit or Expired Permit complaint online</a> or call 311.
 		</span>
 	</div>
-	<div style="font-size:.8em;display:flex;justify-content:space-between;">
+	<div style="font-size:.8em;display:flex;justify-content:space-between;padding-top:10px">
 		<div><a id="dlData" href="no-script.html">Download Data (.csv)</a></div>
 		<div>Built by DOB Analytics <a href="https://www1.nyc.gov/site/buildings/dob/analytics-reports.page" target="_blank">Dev Squad</a> </div>
 	</div>
@@ -912,8 +913,7 @@ function ready(){
 			.on('click', function(d){
 				if(d3.select(this).style("fill-opacity") != 0){
                     tooltipSheds.html(dit( d["Latitude Point"].concat(d["Longitude Point"]),1));
-					//tooltipSheds.style("visibility", "visible");
-									document.querySelector("#map").scrollIntoView({behavior:"smooth",block:"nearest"})
+					document.querySelector("#map").scrollIntoView({behavior:"smooth",block:"nearest"})
 					tooltipSheds.style("display", "flex");
 				}
 			})
