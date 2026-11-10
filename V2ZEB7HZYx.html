@@ -7,54 +7,24 @@
   <link rel="stylesheet" type="text/css" href="https://nycdob.github.io/ActiveNB_A1enlargements/keen/keen-dashboards.css" />
   <link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css' rel='stylesheet' type='text/css'/>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/r-2.1.0/se-1.2.0/datatables.min.css">
   <link href="https://nycdob.github.io/ActiveNB_A1enlargements/build/nv.d3.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" type="text/css" href="https://nycdob.github.io/ActiveShedPermits/build/nouislider.css" media="screen"/>
   <style>
-.filterTableButton {
-	margin-right:5px;
-}
-#riskTable_info{
-	font-weight:bolder !important;
-}
 .row{
 	padding-top: 10px;
 }
 body {
 	background-color: white;
 }
-.jobno{
-	margin-left: 20px;
-}
 #map {
-	height: 100%;
-	width: 100%;
+	height: 100vh;
 	pointer-events: all;
-}
-#table-container{
-	height: 890px;
-	width: 100%;
-	display: block;
-	background-color: white;
 }
 #img{
 	float: left;
 	height: 35px;
 	margin-left: 10px;
 	padding-right: 10px;
-}
-
-#riskTable{
-	height: 100%;
-	font-size: 11px;
-}
-td.details-control {
-	background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
-	cursor: pointer;
-}
-tr.shown td.details-control {
-	background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
-	cursor: pointer;
 }
 .logo{
 	background-image: url('https://raw.githubusercontent.com/NYCDOB/CommunityProfiles_v2/gh-pages/dob_logo_white_transparent.png');
@@ -77,26 +47,7 @@ tr.shown td.details-control {
 	stroke: #fff;
 
 }
-.tooltipSheds {
-    z-index: 9999;
-    color:black;
-	background: #fff;
-	border-radius: 3px; 
-	opacity: 1; 
-	position: absolute;
-    zzztop:250px;
-    border: 1px solid #707070;
-	bottom: 5px;
-	width: 25em;
-	left:15px;
-	display:none;
-	max-height:40%;
-	flex-direction: column;	
-    overflow-y:auto;
-}
-.dataTables_empty {
-  display:none;
-}
+
 .asofDate{
 	font-size:16px;
 }
@@ -157,8 +108,16 @@ font-variation-settings:
 'opsz' 10;
 font-size: 12px;
 }
+
+
+
+@media( max-width:726px){
+	.row {
+		flex-direction:row;
+	}
+}
 @media( max-width:1200px){
-	.dobmain	{
+	zzz.dobmain	{
 		padding-top:50px;
 	}
 	.legendShed {
@@ -194,32 +153,6 @@ font-size: 12px;
 
 }
 
-.dataTables_filter input { width: 150px }
-
-#loadpage{
-	margin: auto;
-	padding-top: 300px;
-}
-#button-wrapper {
-	position: absolute;
-	top: 20px;
-	left: 60px;
-	padding: 15px;
-	border-radius: 5px;
-	background-color: rgba(192,192,192,0.9);
-	border: 2px solid white;
-}
-.btnStyle {
-	border-radius: 5px;
-	background-color: white;
-	border: 1px solid #7a7a7a;
-	color: black;
-	font-size: 13px;
-	font-weight: bold;
-	padding: 4px;
-	width: 100%;
-	
-}
 svg {
 	display: block;
 }
@@ -457,7 +390,7 @@ svg {
 		right: 8px;
 }
 
-.ui {
+zzz.ui {
 	top: 350px;
 	left: 12px;
 	padding: 8px;
@@ -469,7 +402,7 @@ svg {
 	border-radius: 7px;
 	width: 220px;
 }
-.ui-radio {
+zzz.ui-radio {
 	top: 225px;
 	left: 12px;
 	padding: 8px;
@@ -606,6 +539,15 @@ header{
 	display:flex;
 	justify-content: space-between;
 }
+._foot{
+	width:100%;
+    display:flex;flex-wrap:wrap;
+    justify-content:space-between;
+    background-color:black;color:white;
+    padding:16px 35px;
+    font-weight:500;
+    margin-top:auto;
+}
 .notes  {
     padding: 15px 5em;
 	display:flex;
@@ -613,6 +555,19 @@ header{
 	flex-wrap:wrap;
 	background-color:#f3f3f3;
 }
+.tooltipSheds {
+    color:black;
+	background: #fff;
+	border-radius: 3px; 
+	opacity: 1; 
+    border: 1px solid #707070;
+	max-width: 25em;
+	display:none;
+	max-height:30em;
+	flex-direction: column;	
+    overflow-y:auto;
+}
+
 </style>
 <body>
 <header>
@@ -632,9 +587,12 @@ header{
 		<div>Built by DOB Analytics <a href="https://www1.nyc.gov/site/buildings/dob/analytics-reports.page" target="_blank">Dev Squad</a> </div>
 	</div>
 </div>
+
+
+
 <div class="container-fluid dobmain" style="padding-top:5px;">
 	<div class="row">
-		  <div class="col-lg-9" style="height:89vh">
+		  <div class="col-lg-9">
 			  <div class="chart-stage" id="map-container" style="border:1px solid black;height:100%;width:100%">
 			  
 				<div id="map">
@@ -728,36 +686,31 @@ header{
 	<!-- <p class="small text-muted" style=" position:relative; bottom:0px;">Built by DOB Analytics <a href="https://www1.nyc.gov/site/buildings/dob/analytics-reports.page" target="_blank">Dev Squad</a> | This map shows the location of all actively permitted sidewalk sheds and is updated daily. <a id="dlData" href="no-script.html">Download Data (csv)</a></p>	 -->
 </div>
 
+<footer class="_foot">
+<div>Built by DOB <a target="_blank" class="genlink" href="https://www.nyc.gov/site/buildings/dob/analytics-reports.page">Dev Squad</a></div>
+<div><a target="_blank" class="genlink" href="https://www.nyc.gov/"><img height="20" src="https://www1.nyc.gov/assets/home/images/global/nyc_white@x2.png" alt="NYC"></a></div>
+<div><a target="_blank" class="genlink" href="https://www.nyc.gov/home/terms-of-use.page">Terms of Use.</a></div>
+</footer>	
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.9/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-format@3"></script>
 <script src="https://nycdob.github.io/EssentialActiveConstruction/Leaflet.D3SvgOverlay-master/L.D3SvgOverlay.min.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/v/dt/dt-1.10.12/r-2.1.0/se-1.2.0/datatables.min.js"  type="text/javascript" charset="utf8" ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
 <script src="https://nycdob.github.io/ActiveNB_A1enlargements/build/nv.d3.js"></script>
 <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 <script type="text/javascript" src="https://nycdob.github.io/ActiveNB_A1enlargements/keen/keen.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.1/js/dataTables.rowGroup.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.20/api/fnSortNeutral.js"></script>
 <script src="https://nycdob.github.io/ActiveShedPermits/build/nouislider.js"></script>
 <script src="https://nycdob.github.io/ActiveShedPermits/build/wNumb.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 <script>
 
 $(document).ready(function(){
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1;
-	var yyyy = today.getFullYear();
-	today = mm + '/' + dd + '/' + yyyy;	
-	d3.select("#today").html(today);
 	var latlong = [];
 	var selection = [];
-	var formatDate = d3.time.format("%-m/%-d/%Y").parse;
 	var numberFormat = d3.format(",.0f");
 	var legendNumFormat = d3.format(",");
     L.Control.include({
@@ -765,8 +718,38 @@ $(document).ready(function(){
     });	
 var map = L.map('map').setView([40.713312, -73.977407], 14);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png?key=cb1_27tu_1_978b0622efbf904b17d1bcc4', {attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
-var tooltipSheds = d3.select('#map').append('div')
-	.attr('class', 'tooltipSheds');
+
+const PropInfoPopup  = L.Control.extend({
+    options: {
+        position: 'topright'
+    },
+    onAdd: function (map) {
+        const div = L.DomUtil.create('div', 'tooltipSheds');
+        L.DomEvent.disableClickPropagation(div);
+        L.DomEvent.disableScrollPropagation(div);
+
+        // Add a click handler to your element
+        // div.querySelector('button').addEventListener('click', (e) => {
+        //     console.log('Button clicked!');
+        // });
+        return div;
+    },
+    onRemove: function (map) {
+        // Clean up listeners if necessary
+    }
+});
+const popupinfo = new PropInfoPopup();
+map.addControl(popupinfo);
+var tooltipSheds = d3.select('.tooltipSheds')
+
+
+
+
+
+
+
+
+
 var width = $("#map").width(),
 	height = $("#map").height(),
 	points = [],
@@ -799,9 +782,6 @@ function ready(){
 		var pointsUpdSQFT = sel.selectAll('circle').data(points);
 		var maxAge = d3.max(points.map(function(d) { return d.age }));
 		var minAge = d3.min(points.map(function(d) { return d.age }));
-
-		//console.log(maxAge);
-		//console.log(minAge);
 		createLegend(minAge,maxAge);
 		createLegendCD(minAge,maxAge);
 				
@@ -841,7 +821,6 @@ function ready(){
 			};	
 			
 			function getColor(n,classBreaks,colorHex) {
-				//console.log(n,classBreaks,colorHex);
 				var mapScale = chroma.scale(colorHex).classes(classBreaks);
 				if (n === 0) {
 					var regionColor = '#dddcdc';
@@ -913,8 +892,15 @@ function ready(){
 			.on('click', function(d){
 				if(d3.select(this).style("fill-opacity") != 0){
                     tooltipSheds.html(dit( d["Latitude Point"].concat(d["Longitude Point"]),1));
-					document.querySelector("#map").scrollIntoView({behavior:"smooth",block:"nearest"})
+					// document.querySelector("#map").scrollIntoView({behavior:"smooth",block:"nearest"})
+
+					//document.querySelector(".tooltipSheds").scrollIntoView({behavior:"smooth",block:"end" }) // *-*
+					document.querySelector(".tooltipSheds").scrollIntoView({behavior:"smooth",block:"center",container:"all" }) //  no good
 					tooltipSheds.style("display", "flex");
+
+
+
+					
 				}
 			})
 			.on("mouseover", function(d, i){
@@ -941,12 +927,16 @@ function ready(){
 						_l[_dX]['Address']=`${_l[_dX]["House Number"]} ${_l[_dX]["Street Name"]}, ${_l[_dX]["Borough Name"]}`;
                         for (let [k,v] of Object.entries(_sObject) ) {
 							let _str=()=>
+
 							{if (v.includes('Date')) {
 								let _sp=_l[_dX][`${v}`].split('-');
 								if (_sp[1]){
 									return ''.concat(_sp[1].padStart(2,'0'),'/',_sp[2].padStart(2,'0'),'/',_sp[0]);
 								}
-							}}
+							}
+							if(v=='Age'){
+									return numberFormat(_l[_dX][`${v}`])
+							}};
                             _xx+=`<div class="_fM3_0"><div>${k}:</div><div>${_str()||_l[_dX][`${v}`]}</div></div>`;
                         };
 						return `<div class="_tD"><div class="_nav">${_dX+1} of ${_l.length}</div><div><span class="_pr" title="Previous">&#x25C0;</span> <span class="_nx" title="Next">&#x25B6;</span></div><div style="font-size:17px;" title="Close" class="material-symbols-outlined _cl">close</div></div><div class="_cycleD"><span class="_cor">${_l[_dX]["Latitude Point"]}${_l[_dX]["Longitude Point"]}</span>${_xx}</div>`;
@@ -1160,7 +1150,7 @@ function ready(){
 			})
 			.on("update", function(e) {
 				//console.log(e);	
-				tooltipSheds.style("display", "none");
+				//tooltipSheds.style("display", "none");
 				formatAge(e);
 			});
 			
@@ -1445,7 +1435,9 @@ function ready(){
 				nv.addGraph(function() {
 					var chart = nv.models.multiBarChart()
 					.x(function(d) { return d.label })
-					.y(function(d) { return d.value })		
+					.y(function(d) { return d.value })	
+					.staggerLabels(true)
+					.margin({bottom:90})	
 					.duration(250)
 					.margin({top: 15, right: 10, bottom: 20, left: 50})
 					//.margin({right: 30})
